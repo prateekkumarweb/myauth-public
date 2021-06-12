@@ -1,0 +1,40 @@
+{
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "serve": "vite preview",
+    "lint:prettier": "prettier --check .",
+    "lint:prettier-fix": "prettier --write .",
+    "lint:stylelint": "stylelint \"**/*.css\"",
+    "lint:stylelint-fix": "stylelint \"**/*.css\" --fix",
+    "lint:eslint": "eslint --ext .js,.ts,.vue src",
+    "lint:eslint-fix": "eslint --ext .js,.ts,.vue src --fix",
+    "lint": "npm run lint:prettier && npm run lint:stylelint && npm run lint:eslint",
+    "lint-fix": "npm run lint:prettier-fix && npm run lint:stylelint-fix && npm run lint:eslint-fix",
+    "stylelint-check": "stylelint-config-prettier-check",
+    "eslint-check": "eslint-config-prettier src/**/*.ts src/**/*.vue"
+  },
+  "dependencies": {
+    "vue": "^3.0.5"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.26.1",
+    "@vitejs/plugin-vue": "^1.2.3",
+    "@vue/compiler-sfc": "^3.0.5",
+    "autoprefixer": "^10.2.6",
+    "eslint": "^7.28.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-vue": "^7.11.0",
+    "postcss": "^8.3.2",
+    "prettier": "^2.3.1",
+    "stylelint": "^13.13.1",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-standard": "^22.0.0",
+    "tailwindcss": "^2.1.4",
+    "typescript": "^4.3.2",
+    "vite": "^2.3.7",
+    "vue-tsc": "^0.0.24"
+  }
+}
