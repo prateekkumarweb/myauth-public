@@ -1,18 +1,20 @@
 <template>
-  <div class="text-center mt-8 antialiased text-gray-800 font-sans">
-    <img alt="Vue logo" src="./assets/logo.png" class="inline-block" />
-    <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+  <nav-bar></nav-bar>
+  <div class="m-4">
+    <otp-card :totp-key="'aaaa bbbb cccc xxxx yyyy zzzz 2222 7777'"></otp-card>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import NavBar from "./components/NavBar.vue";
+import OtpCard from "./components/OtpCard.vue";
 
 export default defineComponent({
   name: "App",
   components: {
-    HelloWorld,
+    NavBar,
+    OtpCard,
   },
 });
 </script>
