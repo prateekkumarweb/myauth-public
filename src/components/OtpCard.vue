@@ -50,13 +50,18 @@ export default defineComponent({
     const otpPart2 = ref("___");
     const timeRemaining = ref(15);
 
-    const otpInterval = setInterval(() => {
-      getTotp(props.secret).then((totp) => {
+    const otpInterval = setInterval(async () => {
+      try {
+        const totp = await getTotp(props.secret);
         const otp = totp.otp.toString().padStart(6, "0");
         otpPart1.value = otp.slice(0, 3);
         otpPart2.value = otp.slice(3, 6);
         timeRemaining.value = Math.trunc(totp.timeRemaining);
-      });
+      } catch (e) {
+        console.error(e);
+        timeRemaining.value = 0;
+        clearInterval(otpInterval);
+      }
     }, 500);
 
     onUnmounted(() => {

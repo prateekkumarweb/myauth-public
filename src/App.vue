@@ -10,12 +10,15 @@
       ></otp-card
     ></template>
   </div>
+
+  <add-account @addAccount="addAccount"></add-account>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive } from "vue";
 import NavBar from "./components/NavBar.vue";
 import OtpCard from "./components/OtpCard.vue";
+import AddAccount from "./components/AddAccount.vue";
 import { otpauthUriParser } from "./totp";
 
 export default defineComponent({
@@ -23,6 +26,7 @@ export default defineComponent({
   components: {
     NavBar,
     OtpCard,
+    AddAccount,
   },
   setup() {
     const otpauthUris = [
@@ -30,8 +34,16 @@ export default defineComponent({
       "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
       "otpauth://totp/Google:charles@google.com?secret=ABCDEFGH&issuer=Google",
     ];
-    const otpauthParams = otpauthUris.map((uri) => otpauthUriParser(uri));
-    return { otpauthParams };
+    const otpauthParams = reactive(
+      otpauthUris.map((uri) => otpauthUriParser(uri))
+    );
+
+    return {
+      otpauthParams,
+      addAccount(value: { name: string; issuer: string; secret: string }) {
+        otpauthParams.push(value);
+      },
+    };
   },
 });
 </script>

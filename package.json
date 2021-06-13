@@ -17,6 +17,8 @@
     "eslint-check": "eslint-config-prettier src/**/*.ts src/**/*.vue"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.2.0",
+    "@tailwindcss/forms": "^0.3.3",
     "vue": "^3.0.5"
   },
   "devDependencies": {

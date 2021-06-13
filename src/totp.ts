@@ -50,14 +50,14 @@ export const getTotp = async (
   const bytes = new Uint8Array(int32Bytes.buffer);
   bytes.reverse();
   const key = parseKey(keyString);
-  const cryptoKey = await crypto.subtle.importKey(
+  const cryptoKey = await crypto.subtle?.importKey(
     "raw",
     key,
     { name: "HMAC", hash: "SHA-1" },
     false,
     ["sign"]
   );
-  const signature = await crypto.subtle.sign("HMAC", cryptoKey, bytes.buffer);
+  const signature = await crypto.subtle?.sign("HMAC", cryptoKey, bytes.buffer);
   return {
     otp: truncate(new Uint8Array(signature)),
     timeRemaining: 30 - ((now / 1000) % 30),
