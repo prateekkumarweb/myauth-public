@@ -73,12 +73,16 @@ export const otpAuthUriParser = (uri: string): OtpAuthParam | null => {
     if (url.protocol !== "otpauth:") {
       throw new Error("Invalid protocol " + url.protocol);
     }
-    const pathname = url.pathname;
-    if (pathname.slice(0, 7) !== "//totp/") {
-      throw new Error("Invalid otpauth type " + pathname.slice(0, 7));
+
+    // Browser issue
+    // Chrome & Firefox: hostname is "" and pathname is "//totp/Example..."
+    // Safari: hostname is "totp" and pathname is "/Example..."
+    if (url.pathname.slice(0, 7) !== "//totp/" && url.hostname !== "totp") {
+      throw new Error("Invalid otpauth type " + url.toString());
     }
 
-    const nameWithPrefix = pathname.slice(7);
+    const nameWithPrefix =
+      url.hostname === "totp" ? url.pathname.slice(1) : url.pathname.slice(7);
     const indexOfColon = nameWithPrefix.indexOf(":");
     const name =
       indexOfColon === -1
