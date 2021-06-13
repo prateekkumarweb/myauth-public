@@ -1,5 +1,5 @@
 const parseKey = (key: string) => {
-  const keyBuffer = [...key]
+  const keyBuffer = [...key.toLowerCase()]
     .filter((c) => c !== " ")
     .map((c) => {
       const charCode = c.charCodeAt(0);
@@ -62,4 +62,41 @@ export const getTotp = async (
     otp: truncate(new Uint8Array(signature)),
     timeRemaining: 30 - ((now / 1000) % 30),
   };
+};
+
+export const otpauthUriParser = (
+  uri: string
+): { secret: string; issuer: string; name: string } | null => {
+  try {
+    const url = new URL(uri);
+
+    if (url.protocol !== "otpauth:") {
+      throw new Error("Invalid protocol " + url.protocol);
+    }
+    const pathname = url.pathname;
+    if (pathname.slice(0, 7) !== "//totp/") {
+      throw new Error("Invalid otpauth type " + pathname.slice(0, 7));
+    }
+
+    const nameWithPrefix = pathname.slice(7);
+    const indexOfColon = nameWithPrefix.indexOf(":");
+    const name =
+      indexOfColon === -1
+        ? nameWithPrefix
+        : nameWithPrefix.slice(indexOfColon + 1);
+
+    const issuer = url.searchParams.get("issuer");
+    if (issuer === null) {
+      throw new Error("Issuer cannot be null");
+    }
+    const secret = url.searchParams.get("secret");
+    if (secret === null) {
+      throw new Error("Secret cannot be null");
+    }
+
+    return { name, issuer, secret };
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
 };

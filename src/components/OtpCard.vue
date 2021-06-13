@@ -1,12 +1,28 @@
 <template>
   <div class="flex border rounded p-2 gap-2 items-center">
-    <img class="h-16 rounded-full border" src="../assets/logo.png" alt="Logo" />
+    <div
+      class="
+        h-16
+        w-16
+        rounded-full
+        border
+        bg-green-600
+        text-white text-4xl
+        flex
+        justify-center
+        items-center
+      "
+    >
+      <div class="font-bold">{{ issuer.charAt(0) }}</div>
+    </div>
     <div>
-      <div>Google (test@gmail.com)</div>
+      <div>{{ issuer }} ({{ name }})</div>
       <div class="text-2xl">{{ otpPart1 }} {{ otpPart2 }}</div>
     </div>
     <div class="flex-grow"></div>
-    <div class="text-4xl font-extralight">{{ timeRemaining }}</div>
+    <div class="text-4xl font-extralight text-gray-400">
+      {{ timeRemaining }}
+    </div>
   </div>
 </template>
 
@@ -16,18 +32,26 @@ import { getTotp } from "../totp";
 
 export default defineComponent({
   props: {
-    totpKey: {
+    secret: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    issuer: {
       type: String,
       required: true,
     },
   },
   setup(props) {
-    const otpPart1 = ref("123");
-    const otpPart2 = ref("456");
+    const otpPart1 = ref("___");
+    const otpPart2 = ref("___");
     const timeRemaining = ref(15);
 
     const otpInterval = setInterval(() => {
-      getTotp(props.totpKey).then((totp) => {
+      getTotp(props.secret).then((totp) => {
         const otp = totp.otp.toString().padStart(6, "0");
         otpPart1.value = otp.slice(0, 3);
         otpPart2.value = otp.slice(3, 6);
