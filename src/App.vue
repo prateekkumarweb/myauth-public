@@ -1,25 +1,28 @@
 <template>
   <nav-bar></nav-bar>
   <div class="m-4 gap-2 flex flex-col">
-    <template v-for="item in otpauthParams" :key="item">
+    <template v-for="(item, index) in params" :key="item">
       <otp-card
         v-if="item"
         :secret="item.secret"
         :issuer="item.issuer"
         :name="item.name"
-      ></otp-card
-    ></template>
+        @deleteAccount="deleteAccount(index)"
+      ></otp-card>
+    </template>
   </div>
 
   <add-account @addAccount="addAccount"></add-account>
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent } from "vue";
+import { otpAuthUriParser } from "./totp";
+import { OtpAuthParam, useStore } from "./store";
+
 import NavBar from "./components/NavBar.vue";
 import OtpCard from "./components/OtpCard.vue";
 import AddAccount from "./components/AddAccount.vue";
-import { otpauthUriParser } from "./totp";
 
 export default defineComponent({
   name: "App",
@@ -29,19 +32,25 @@ export default defineComponent({
     AddAccount,
   },
   setup() {
-    const otpauthUris = [
+    const otpAuthUris = [
       "otpauth://totp/Google:bob@google.com?secret=AAAABBBBCCCCXXXXYYYYZZZZ22227777&issuer=Google",
       "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
       "otpauth://totp/Google:charles@google.com?secret=ABCDEFGH&issuer=Google",
     ];
-    const otpauthParams = reactive(
-      otpauthUris.map((uri) => otpauthUriParser(uri))
-    );
+
+    const store = useStore();
+
+    for (const param of otpAuthUris.map((uri) => otpAuthUriParser(uri))) {
+      if (param) store.addParam(param);
+    }
 
     return {
-      otpauthParams,
-      addAccount(value: { name: string; issuer: string; secret: string }) {
-        otpauthParams.push(value);
+      params: store.params,
+      addAccount(value: OtpAuthParam) {
+        store.addParam(value);
+      },
+      deleteAccount(index: number) {
+        store.deleteParam(index);
       },
     };
   },

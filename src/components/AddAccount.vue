@@ -1,24 +1,11 @@
 <template>
-  <div class="absolute bottom-0 right-0 m-4">
+  <div class="fixed bottom-0 right-0 m-4">
     <button
       type="button"
-      class="border-1 shadow rounded-full p-2 text-green-800"
+      class="border-1 shadow rounded-full p-2 text-green-800 bg-green-200"
       @click="openModal()"
     >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-10 w-10"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-        />
-      </svg>
+      <plus-icon class="h-10 w-10"></plus-icon>
     </button>
   </div>
 
@@ -104,12 +91,14 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { Dialog, DialogOverlay, DialogTitle } from "@headlessui/vue";
+import { PlusIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({
   components: {
     Dialog,
     DialogOverlay,
     DialogTitle,
+    PlusIcon,
   },
   emits: ["addAccount"],
 

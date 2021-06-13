@@ -1,3 +1,5 @@
+import { OtpAuthParam } from "./store";
+
 const parseKey = (key: string) => {
   const keyBuffer = [...key.toLowerCase()]
     .filter((c) => c !== " ")
@@ -64,9 +66,7 @@ export const getTotp = async (
   };
 };
 
-export const otpauthUriParser = (
-  uri: string
-): { secret: string; issuer: string; name: string } | null => {
+export const otpAuthUriParser = (uri: string): OtpAuthParam | null => {
   try {
     const url = new URL(uri);
 

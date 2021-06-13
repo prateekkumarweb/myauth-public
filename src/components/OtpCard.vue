@@ -20,17 +20,24 @@
       <div class="text-2xl">{{ otpPart1 }} {{ otpPart2 }}</div>
     </div>
     <div class="flex-grow"></div>
-    <div class="text-4xl font-extralight text-gray-400">
-      {{ timeRemaining }}
+    <div class="flex flex-col items-end">
+      <div class="cursor-pointer" @click="deleteAccount">
+        <trash-icon class="h-6 w-6 text-red-300"></trash-icon>
+      </div>
+      <div class="text-4xl font-extralight text-gray-400">
+        {{ timeRemaining }}
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, onUnmounted, ref } from "vue";
+import { TrashIcon } from "@heroicons/vue/outline";
 import { getTotp } from "../totp";
 
 export default defineComponent({
+  components: { TrashIcon },
   props: {
     secret: {
       type: String,
@@ -45,7 +52,8 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  emits: ["deleteAccount"],
+  setup(props, { emit }) {
     const otpPart1 = ref("___");
     const otpPart2 = ref("___");
     const timeRemaining = ref(15);
@@ -68,7 +76,14 @@ export default defineComponent({
       clearInterval(otpInterval);
     });
 
-    return { otpPart1, otpPart2, timeRemaining };
+    return {
+      otpPart1,
+      otpPart2,
+      timeRemaining,
+      deleteAccount() {
+        emit("deleteAccount");
+      },
+    };
   },
 });
 </script>
