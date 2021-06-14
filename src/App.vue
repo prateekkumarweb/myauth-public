@@ -17,12 +17,11 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { otpAuthUriParser } from "./totp";
-import { OtpAuthParam, useStore } from "./store";
-
+import AddAccount from "./components/AddAccount.vue";
 import NavBar from "./components/NavBar.vue";
 import OtpCard from "./components/OtpCard.vue";
-import AddAccount from "./components/AddAccount.vue";
+import { OtpAuthParam, useStore } from "./store";
+import { otpAuthUriParser } from "./totp";
 
 export default defineComponent({
   name: "App",

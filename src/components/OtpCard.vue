@@ -33,8 +33,8 @@
 
 <script lang="ts">
 import { defineComponent, onUnmounted, ref } from "vue";
-import TrashIcon from "./icons/TrashIcon.vue";
 import { getTotp } from "../totp";
+import TrashIcon from "./icons/TrashIcon.vue";
 
 export default defineComponent({
   components: { TrashIcon },

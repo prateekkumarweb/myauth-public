@@ -89,8 +89,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
 import { Dialog, DialogOverlay, DialogTitle } from "@headlessui/vue";
+import { defineComponent, ref } from "vue";
 import PlusIcon from "./icons/PlusIcon.vue";
 
 export default defineComponent({
