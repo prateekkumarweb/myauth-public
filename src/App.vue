@@ -1,7 +1,7 @@
 <template>
   <nav-bar></nav-bar>
   <div class="m-4 gap-2 flex flex-col">
-    <template v-for="(item, index) in params" :key="item">
+    <template v-for="(item, index) in params" :key="index">
       <otp-card
         v-if="item"
         :secret="item.secret"
@@ -12,7 +12,7 @@
     </template>
   </div>
 
-  <add-account @addAccount="addAccount"></add-account>
+  <add-account @addParam="addParam"></add-account>
 </template>
 
 <script lang="ts">
@@ -45,8 +45,8 @@ export default defineComponent({
     }
 
     return {
-      params: store.params,
-      addAccount(value: OtpAuthParam) {
+      params: store.otpAuthParams,
+      addParam(value: OtpAuthParam) {
         store.addParam(value);
       },
       deleteAccount(index: number) {

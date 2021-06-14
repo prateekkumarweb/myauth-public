@@ -18,12 +18,11 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.2.0",
-    "@heroicons/vue": "^1.0.1",
-    "@tailwindcss/forms": "^0.3.3",
     "pinia": "^2.0.0-beta.2",
     "vue": "^3.0.5"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.3.3",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@vitejs/plugin-vue": "^1.2.3",
     "@vue/compiler-sfc": "^3.0.5",

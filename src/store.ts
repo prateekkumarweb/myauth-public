@@ -15,11 +15,6 @@ export const useStore = defineStore({
   state(): AppState {
     return { otpAuthParams: [] };
   },
-  getters: {
-    params(state) {
-      return state.otpAuthParams;
-    },
-  },
   actions: {
     addParam(param: OtpAuthParam) {
       this.otpAuthParams.push(param);

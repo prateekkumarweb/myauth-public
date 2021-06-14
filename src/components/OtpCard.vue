@@ -21,8 +21,8 @@
     </div>
     <div class="flex-grow"></div>
     <div class="flex flex-col items-end">
-      <div class="cursor-pointer" @click="deleteAccount">
-        <trash-icon class="h-6 w-6 text-red-300"></trash-icon>
+      <div class="cursor-pointer text-red-300" @click="deleteAccount">
+        <trash-icon class="h-6 w-6"></trash-icon>
       </div>
       <div class="text-4xl font-extralight text-gray-400">
         {{ timeRemaining }}
@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import { defineComponent, onUnmounted, ref } from "vue";
-import { TrashIcon } from "@heroicons/vue/outline";
+import TrashIcon from "./icons/TrashIcon.vue";
 import { getTotp } from "../totp";
 
 export default defineComponent({

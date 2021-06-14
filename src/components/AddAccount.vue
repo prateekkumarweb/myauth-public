@@ -91,7 +91,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { Dialog, DialogOverlay, DialogTitle } from "@headlessui/vue";
-import { PlusIcon } from "@heroicons/vue/outline";
+import PlusIcon from "./icons/PlusIcon.vue";
 
 export default defineComponent({
   components: {
@@ -100,7 +100,7 @@ export default defineComponent({
     DialogTitle,
     PlusIcon,
   },
-  emits: ["addAccount"],
+  emits: ["addParam"],
 
   setup(props, { emit }) {
     const isOpen = ref(false);
@@ -123,7 +123,7 @@ export default defineComponent({
       closeModal,
       addAndClose() {
         if (name.value && issuer.value && secret.value) {
-          emit("addAccount", {
+          emit("addParam", {
             name: name.value,
             issuer: issuer.value,
             secret: secret.value,
