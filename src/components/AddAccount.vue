@@ -64,9 +64,9 @@
           <div v-if="!showScanner">
             <div class="mt-2 text-gray-700 flex flex-col gap-3">
               <label class="block">
-                <span>Name</span>
+                <span>Label</span>
                 <input
-                  v-model="name"
+                  v-model="label"
                   type="text"
                   class="mt-1 block w-full"
                   placeholder="test@example.com"
@@ -130,7 +130,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const isOpen = ref(false);
 
-    const name = ref("");
+    const label = ref("");
     const issuer = ref("");
     const secret = ref("");
     const errorString = ref("");
@@ -138,7 +138,7 @@ export default defineComponent({
     function closeModal() {
       isOpen.value = false;
       errorString.value = "";
-      name.value = "";
+      label.value = "";
       issuer.value = "";
       secret.value = "";
     }
@@ -149,9 +149,9 @@ export default defineComponent({
       isOpen,
       closeModal,
       addAndClose() {
-        if (name.value && issuer.value && secret.value) {
+        if (label.value && issuer.value && secret.value) {
           emit("addParam", {
-            name: name.value,
+            label: label.value,
             issuer: issuer.value,
             secret: secret.value,
           });
@@ -166,7 +166,7 @@ export default defineComponent({
       setIsOpen(value: boolean) {
         isOpen.value = value;
       },
-      name,
+      label,
       issuer,
       secret,
       errorString,
@@ -175,7 +175,7 @@ export default defineComponent({
         const otpAuthUri = code.data;
         const otpAuthParam = otpAuthUriParser(otpAuthUri);
         if (otpAuthParam) {
-          name.value = otpAuthParam.name;
+          label.value = otpAuthParam.label;
           issuer.value = otpAuthParam.issuer;
           secret.value = otpAuthParam.secret;
           showScanner.value = false;

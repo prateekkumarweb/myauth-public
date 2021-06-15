@@ -7,7 +7,7 @@
         v-if="item"
         :secret="item.secret"
         :issuer="item.issuer"
-        :name="item.name"
+        :label="item.label"
         @deleteAccount="deleteAccount(index)"
       ></otp-card>
     </template>

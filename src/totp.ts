@@ -81,13 +81,13 @@ export const otpAuthUriParser = (uri: string): OtpAuthParam | null => {
       throw new Error("Invalid otpauth type " + url.toString());
     }
 
-    const nameWithPrefix =
+    const labelWithPrefix =
       url.hostname === "totp" ? url.pathname.slice(1) : url.pathname.slice(7);
-    const indexOfColon = nameWithPrefix.indexOf(":");
-    const name =
+    const indexOfColon = labelWithPrefix.indexOf(":");
+    const label =
       indexOfColon === -1
-        ? nameWithPrefix
-        : nameWithPrefix.slice(indexOfColon + 1);
+        ? labelWithPrefix
+        : labelWithPrefix.slice(indexOfColon + 1);
 
     const issuer = url.searchParams.get("issuer");
     if (issuer === null) {
@@ -98,7 +98,7 @@ export const otpAuthUriParser = (uri: string): OtpAuthParam | null => {
       throw new Error("Secret cannot be null");
     }
 
-    return { name, issuer, secret };
+    return { label, issuer, secret };
   } catch (e) {
     console.error(e);
     return null;

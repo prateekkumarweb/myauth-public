@@ -16,7 +16,7 @@
       <div class="font-bold">{{ issuer.charAt(0) }}</div>
     </div>
     <div>
-      <div>{{ issuer }} ({{ name }})</div>
+      <div>{{ issuer }} ({{ label }})</div>
       <div class="text-2xl">{{ otpPart1 }} {{ otpPart2 }}</div>
     </div>
     <div class="flex-grow"></div>
@@ -43,7 +43,7 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    name: {
+    label: {
       type: String,
       required: true,
     },

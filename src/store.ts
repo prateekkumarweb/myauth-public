@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 
 export interface OtpAuthParam {
-  name: string;
+  label: string;
   issuer: string;
   secret: string;
 }
