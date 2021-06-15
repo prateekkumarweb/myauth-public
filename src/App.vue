@@ -1,5 +1,6 @@
 <template>
   <nav-bar></nav-bar>
+
   <div class="m-4 gap-2 flex flex-col">
     <template v-for="(item, index) in params" :key="index">
       <otp-card

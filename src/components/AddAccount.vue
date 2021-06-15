@@ -37,50 +37,71 @@
         >
           <DialogTitle
             as="h3"
-            class="text-lg font-medium leading-6 text-gray-900"
+            class="
+              text-lg
+              font-medium
+              leading-6
+              text-gray-900
+              flex
+              justify-between
+              items-center
+            "
           >
-            Add new account
+            <div>{{ !showScanner ? "Enter manually" : "Scan QR" }}</div>
+
+            <button class="btn-primary" @click="showScanner = !showScanner">
+              {{ showScanner ? "Enter manually" : "Scan QR" }}
+            </button>
           </DialogTitle>
 
-          <div class="mt-2 text-gray-700 flex flex-col gap-3">
-            <label class="block">
-              <span>Name</span>
-              <input
-                v-model="name"
-                type="text"
-                class="mt-1 block w-full"
-                placeholder="test@example.com"
-              />
-            </label>
-            <label class="block">
-              <span>Issuer</span>
-              <input
-                v-model="issuer"
-                type="text"
-                class="mt-1 block w-full"
-                placeholder="Example"
-              />
-            </label>
-            <label class="block">
-              <span>Secret</span>
-              <input
-                v-model="secret"
-                type="text"
-                class="mt-1 block w-full"
-                placeholder="AAAABBBBCCCCDDDD"
-              />
-            </label>
+          <div v-if="showScanner">
+            <qr-code-scanner
+              class="mt-2"
+              @qrCodeScan="qrCodeScan"
+            ></qr-code-scanner>
           </div>
 
-          <p class="text-red-700 mt-4">{{ errorString }}</p>
+          <div v-if="!showScanner">
+            <div class="mt-2 text-gray-700 flex flex-col gap-3">
+              <label class="block">
+                <span>Name</span>
+                <input
+                  v-model="name"
+                  type="text"
+                  class="mt-1 block w-full"
+                  placeholder="test@example.com"
+                />
+              </label>
+              <label class="block">
+                <span>Issuer</span>
+                <input
+                  v-model="issuer"
+                  type="text"
+                  class="mt-1 block w-full"
+                  placeholder="Example"
+                />
+              </label>
+              <label class="block">
+                <span>Secret</span>
+                <input
+                  v-model="secret"
+                  type="text"
+                  class="mt-1 block w-full"
+                  placeholder="AAAABBBBCCCCDDDD"
+                />
+              </label>
+            </div>
 
-          <div class="mt-4 flex gap-2">
-            <button type="button" class="btn-primary" @click="addAndClose">
-              Add
-            </button>
-            <button type="button" class="btn-error" @click="closeModal">
-              Cancel
-            </button>
+            <p class="text-red-700 mt-4">{{ errorString }}</p>
+
+            <div class="mt-4 flex gap-2">
+              <button type="button" class="btn-primary" @click="addAndClose">
+                Add
+              </button>
+              <button type="button" class="btn-error" @click="closeModal">
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -90,8 +111,11 @@
 
 <script lang="ts">
 import { Dialog, DialogOverlay, DialogTitle } from "@headlessui/vue";
+import { QRCode } from "jsqr";
 import { defineComponent, ref } from "vue";
+import { otpAuthUriParser } from "../totp";
 import PlusIcon from "./icons/PlusIcon.vue";
+import QrCodeScanner from "./QrCodeScanner.vue";
 
 export default defineComponent({
   components: {
@@ -99,6 +123,7 @@ export default defineComponent({
     DialogOverlay,
     DialogTitle,
     PlusIcon,
+    QrCodeScanner,
   },
   emits: ["addParam"],
 
@@ -117,6 +142,8 @@ export default defineComponent({
       issuer.value = "";
       secret.value = "";
     }
+
+    const showScanner = ref(true);
 
     return {
       isOpen,
@@ -143,6 +170,20 @@ export default defineComponent({
       issuer,
       secret,
       errorString,
+      showScanner,
+      qrCodeScan(code: QRCode) {
+        const otpAuthUri = code.data;
+        const otpAuthParam = otpAuthUriParser(otpAuthUri);
+        if (otpAuthParam) {
+          name.value = otpAuthParam.name;
+          issuer.value = otpAuthParam.issuer;
+          secret.value = otpAuthParam.secret;
+          showScanner.value = false;
+        }
+
+        console.log(code);
+        showScanner.value = false;
+      },
     };
   },
 });
