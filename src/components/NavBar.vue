@@ -14,13 +14,23 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useStore } from "../store";
+import { decrypt, encrypt } from "../crypt";
 
 export default defineComponent({
   setup() {
     const store = useStore();
 
-    function exportKeys() {
-      console.log(JSON.stringify({ version: 1, params: store.otpAuthParams }));
+    async function exportKeys() {
+      const message = JSON.stringify({
+        version: 1,
+        params: store.otpAuthParams,
+      });
+      console.log(message);
+      const password = prompt("Enter password to encrypt");
+      const encrypted = await encrypt(message, password ?? "");
+      console.log(encrypted);
+      const decrypted = await decrypt(encrypted, password ?? "");
+      console.log(decrypted);
     }
 
     return { exportKeys };
