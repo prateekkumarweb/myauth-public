@@ -14,6 +14,8 @@
   </div>
 
   <add-account @addParam="addParam"></add-account>
+
+  <reload-prompt />
 </template>
 
 <script lang="ts">
@@ -23,6 +25,7 @@ import NavBar from "./components/NavBar.vue";
 import OtpCard from "./components/OtpCard.vue";
 import { OtpAuthParam, useStore } from "./store";
 import { otpAuthUriParser } from "./totp";
+import ReloadPrompt from "./components/ReloadPrompt.vue";
 
 export default defineComponent({
   name: "App",
@@ -30,6 +33,7 @@ export default defineComponent({
     NavBar,
     OtpCard,
     AddAccount,
+    ReloadPrompt,
   },
   setup() {
     const otpAuthUris = [

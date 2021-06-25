@@ -3,6 +3,7 @@
     <button
       type="button"
       class="border-1 shadow rounded-full p-2 text-green-800 bg-green-200"
+      aria-label="Add"
       @click="openModal()"
     >
       <plus-icon class="h-10 w-10"></plus-icon>

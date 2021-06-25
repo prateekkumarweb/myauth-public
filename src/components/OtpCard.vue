@@ -24,7 +24,7 @@
       <div class="cursor-pointer text-red-300" @click="deleteAccount">
         <trash-icon class="h-6 w-6"></trash-icon>
       </div>
-      <div class="text-4xl font-extralight text-gray-400">
+      <div class="text-4xl font-extralight text-gray-500">
         {{ timeRemaining }}
       </div>
     </div>
