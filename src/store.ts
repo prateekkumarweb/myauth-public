@@ -19,6 +19,21 @@ export const useStore = defineStore({
     addParam(param: OtpAuthParam) {
       this.otpAuthParams.push(param);
     },
+    importParams(params: OtpAuthParam[], keepExisting: boolean) {
+      params.forEach((param) => {
+        if (
+          keepExisting ||
+          this.$state.otpAuthParams.filter(
+            (p) =>
+              p.secret === param.secret &&
+              p.issuer === param.issuer &&
+              p.label === param.label
+          ).length === 0
+        ) {
+          this.addParam(param);
+        }
+      });
+    },
     deleteParam(index: number) {
       this.otpAuthParams.splice(index, 1);
     },
