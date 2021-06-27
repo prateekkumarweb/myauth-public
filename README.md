@@ -29,3 +29,21 @@ Run `Volar: Switch TS Plugin on/off` from VSCode command palette.
 ## TODO
 
 - [ ] Update pinia version to vuex 5 when released
+
+## Firebase config
+
+Firebase config should be provided in `firebase-config.json` file.
+
+```
+{
+  "apiKey": "...",
+  "authDomain": "...",
+  "projectId": "...",
+  "storageBucket": "...",
+  "messagingSenderId": "...",
+  "appId": "...",
+  "measurementId": "..."
+}
+```
+
+On GitHub Actions, the above file is base64 encoded using `base64 firebase-config.json` and stored as GitHub secret which is then extracted in GitHub Actions.

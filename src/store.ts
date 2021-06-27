@@ -1,3 +1,4 @@
+import { User } from "firebase/auth";
 import { defineStore } from "pinia";
 
 export interface OtpAuthParam {
@@ -6,16 +7,47 @@ export interface OtpAuthParam {
   secret: string;
 }
 
+export interface AuthUser {
+  displayName: string | null;
+  email: string | null;
+  emailVerified: boolean;
+  isAnonymous: boolean;
+  uid: string;
+  providerId: string;
+}
+
 interface AppState {
   otpAuthParams: OtpAuthParam[];
+  user: AuthUser | null | undefined; // undefined means data not loaded yet
 }
 
 export const useStore = defineStore({
   id: "myAuthStore",
   state(): AppState {
-    return { otpAuthParams: [] };
+    return { otpAuthParams: [], user: undefined };
   },
   actions: {
+    signIn(user: User) {
+      const {
+        displayName,
+        email,
+        emailVerified,
+        isAnonymous,
+        uid,
+        providerId,
+      } = user;
+      this.user = {
+        displayName,
+        emailVerified,
+        isAnonymous,
+        email,
+        uid,
+        providerId,
+      };
+    },
+    signOut() {
+      this.user = null;
+    },
     addParam(param: OtpAuthParam) {
       this.otpAuthParams.push(param);
     },

@@ -23,9 +23,10 @@ import { defineComponent } from "vue";
 import AddAccount from "./components/AddAccount.vue";
 import NavBar from "./components/NavBar.vue";
 import OtpCard from "./components/OtpCard.vue";
+import ReloadPrompt from "./components/ReloadPrompt.vue";
+import { setAuthObserver } from "./firebase";
 import { OtpAuthParam, useStore } from "./store";
 import { otpAuthUriParser } from "./totp";
-import ReloadPrompt from "./components/ReloadPrompt.vue";
 
 export default defineComponent({
   name: "App",
@@ -36,6 +37,8 @@ export default defineComponent({
     ReloadPrompt,
   },
   setup() {
+    setAuthObserver();
+
     const otpAuthUris = [
       "otpauth://totp/Google:bob@google.com?secret=AAAABBBBCCCCXXXXYYYYZZZZ22227777&issuer=Google",
       "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
