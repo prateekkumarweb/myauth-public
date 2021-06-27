@@ -25,12 +25,7 @@
       >
         <label class="block">
           <span>Enter a password to encrypt:</span>
-          <input
-            v-model="password"
-            type="password"
-            class="mt-1 block w-full"
-            placeholder="********"
-          />
+          <input v-model="password" type="password" class="mt-1 block w-full" />
         </label>
       </div>
 
@@ -40,17 +35,11 @@
           <textarea
             v-model="encrypted"
             class="mt-1 block w-full h-64"
-            placeholder="Encrypted text"
           ></textarea>
         </label>
         <label class="block">
           <span>Enter the password to decrypt:</span>
-          <input
-            v-model="password"
-            type="password"
-            class="mt-1 block w-full"
-            placeholder="********"
-          />
+          <input v-model="password" type="password" class="mt-1 block w-full" />
         </label>
         <label class="block">
           <input v-model="keepExisting" type="checkbox" class="" />

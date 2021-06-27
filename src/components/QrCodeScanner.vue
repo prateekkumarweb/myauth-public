@@ -1,5 +1,3 @@
-
-
 <template>
   <div class="border rounded-md p-4">
     <div class="text-gray-700">{{ errorMessage }}</div>
