@@ -136,8 +136,6 @@ export default defineComponent({
           secret.value = otpAuthParam.secret;
           showScanner.value = false;
         }
-
-        console.log(code);
         showScanner.value = false;
       },
     };

@@ -1,9 +1,8 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if
-          request.time < timestamp.date(2021, 7, 27);
+    match /user_exports/{docid} {
+      allow read, write: if docid == request.auth.uid
     }
   }
 }

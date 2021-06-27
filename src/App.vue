@@ -2,6 +2,9 @@
   <nav-bar></nav-bar>
 
   <div class="m-4 gap-2 flex flex-col">
+    <export-and-import></export-and-import>
+    <div><!-- Exmpty div for gap --></div>
+
     <template v-for="(item, index) in params" :key="index">
       <otp-card
         v-if="item"
@@ -21,6 +24,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import AddAccount from "./components/AddAccount.vue";
+import ExportAndImport from "./components/ExportAndImport.vue";
 import NavBar from "./components/NavBar.vue";
 import OtpCard from "./components/OtpCard.vue";
 import ReloadPrompt from "./components/ReloadPrompt.vue";
@@ -35,6 +39,7 @@ export default defineComponent({
     OtpCard,
     AddAccount,
     ReloadPrompt,
+    ExportAndImport,
   },
   setup() {
     setAuthObserver();
