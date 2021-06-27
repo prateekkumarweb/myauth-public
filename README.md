@@ -47,3 +47,9 @@ Firebase config should be provided in `firebase-config.json` file.
 ```
 
 On GitHub Actions, the above file is base64 encoded using `base64 firebase-config.json` and stored as GitHub secret which is then extracted in GitHub Actions.
+
+## Deploy firestore rules
+
+```bash
+$ firestore deploy --only firestore:rules
+```

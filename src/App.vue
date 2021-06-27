@@ -1,28 +1,35 @@
 <template>
   <nav-bar></nav-bar>
 
-  <div class="m-4 gap-2 flex flex-col">
-    <export-and-import></export-and-import>
-    <div><!-- Exmpty div for gap --></div>
+  <div v-if="user">
+    <div class="m-4 gap-2 flex flex-col">
+      <export-and-import></export-and-import>
+      <div><!-- Exmpty div for gap --></div>
+      <div v-if="params.length == 0">
+        There are no saved accounts. Import your accounts if you have previously
+        synced.
+      </div>
+      <template v-for="(item, index) in params" :key="index">
+        <otp-card
+          v-if="item"
+          :secret="item.secret"
+          :issuer="item.issuer"
+          :label="item.label"
+          @deleteAccount="deleteAccount(index)"
+        ></otp-card>
+      </template>
+    </div>
 
-    <template v-for="(item, index) in params" :key="index">
-      <otp-card
-        v-if="item"
-        :secret="item.secret"
-        :issuer="item.issuer"
-        :label="item.label"
-        @deleteAccount="deleteAccount(index)"
-      ></otp-card>
-    </template>
+    <add-account @addParam="addParam"></add-account>
   </div>
 
-  <add-account @addParam="addParam"></add-account>
+  <div v-if="!user" class="m-4">You need to sign in to use this app.</div>
 
   <reload-prompt />
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import AddAccount from "./components/AddAccount.vue";
 import ExportAndImport from "./components/ExportAndImport.vue";
 import NavBar from "./components/NavBar.vue";
@@ -30,7 +37,6 @@ import OtpCard from "./components/OtpCard.vue";
 import ReloadPrompt from "./components/ReloadPrompt.vue";
 import { setAuthObserver } from "./firebase";
 import { OtpAuthParam, useStore } from "./store";
-import { otpAuthUriParser } from "./totp";
 
 export default defineComponent({
   name: "App",
@@ -44,17 +50,7 @@ export default defineComponent({
   setup() {
     setAuthObserver();
 
-    const otpAuthUris = [
-      "otpauth://totp/Google:bob@google.com?secret=AAAABBBBCCCCXXXXYYYYZZZZ22227777&issuer=Google",
-      "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
-      "otpauth://totp/Google:charles@google.com?secret=ABCDEFGH&issuer=Google",
-    ];
-
     const store = useStore();
-
-    for (const param of otpAuthUris.map((uri) => otpAuthUriParser(uri))) {
-      if (param) store.addParam(param);
-    }
 
     return {
       params: store.otpAuthParams,
@@ -64,6 +60,7 @@ export default defineComponent({
       deleteAccount(index: number) {
         store.deleteParam(index);
       },
+      user: computed(() => store.user),
     };
   },
 });

@@ -47,6 +47,7 @@ export const useStore = defineStore({
     },
     signOut() {
       this.user = null;
+      this.otpAuthParams.length = 0;
     },
     addParam(param: OtpAuthParam) {
       this.otpAuthParams.push(param);
