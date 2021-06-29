@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@headlessui/vue": "^1.3.0",
-    "firebase": "=9.0.0-beta.4",
+    "firebase": "=9.0.0-beta.2",
     "jsqr": "^1.4.0",
     "pinia": "^2.0.0-beta.3",
     "vue": "^3.1.2"
