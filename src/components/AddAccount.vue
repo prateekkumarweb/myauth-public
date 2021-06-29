@@ -56,10 +56,10 @@
       <p class="text-red-700 mt-4">{{ errorString }}</p>
 
       <div class="mt-4 flex gap-2">
-        <button type="button" class="btn-primary" @click="addAndClose">
+        <button type="button" class="btnx-primary" @click="addAndClose">
           Add
         </button>
-        <button type="button" class="btn-error" @click="closeModal">
+        <button type="button" class="btnx-error" @click="closeModal">
           Cancel
         </button>
       </div>

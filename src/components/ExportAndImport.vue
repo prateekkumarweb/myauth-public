@@ -1,7 +1,7 @@
 <template>
   <div class="flex gap-2 justify-end">
-    <button class="btn-primary" @click="openExportModal">Export</button>
-    <button class="btn-primary" @click="openImportModal">Import</button>
+    <button class="btnx-primary" @click="openExportModal">Export</button>
+    <button class="btnx-primary" @click="openImportModal">Import</button>
   </div>
 
   <app-dialog
@@ -11,7 +11,7 @@
   >
     <div v-if="exportedKeys === ''">
       <div v-if="showImportView" class="mt-2">
-        <button type="button" class="btn-primary" @click="importFromFirestore">
+        <button type="button" class="btnx-primary" @click="importFromFirestore">
           Get encrypted text from sync
         </button>
 
@@ -52,12 +52,12 @@
       <div class="mt-4 flex gap-2">
         <button
           type="button"
-          class="btn-primary"
+          class="btnx-primary"
           @click="showImportView ? importKeys() : exportKeys()"
         >
           {{ showImportView ? "Import" : "Export" }}
         </button>
-        <button type="button" class="btn-error" @click="closeModal">
+        <button type="button" class="btnx-error" @click="closeModal">
           Cancel
         </button>
       </div>
@@ -78,12 +78,12 @@
       <div class="mt-2">
         <button
           type="button"
-          class="btn-primary mr-2"
+          class="btnx-primary mr-2"
           @click="syncWithFirestore"
         >
           Sync
         </button>
-        <button type="button" class="btn-error" @click="closeModal">
+        <button type="button" class="btnx-error" @click="closeModal">
           Close
         </button>
       </div>

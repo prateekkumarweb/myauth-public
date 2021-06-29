@@ -41,7 +41,7 @@
 
             <button
               v-if="showTopButton"
-              class="btn-primary"
+              class="btnx-primary"
               @click="topButtonClicked"
             >
               {{ topButtonText }}

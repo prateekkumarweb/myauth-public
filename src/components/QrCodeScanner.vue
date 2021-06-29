@@ -6,7 +6,6 @@
 </template>
 
 <script lang="ts">
-import jsQR from "jsqr";
 import { defineComponent, onBeforeUnmount, onMounted, Ref, ref } from "vue";
 
 export default defineComponent({
@@ -46,7 +45,7 @@ export default defineComponent({
       });
     });
 
-    function tick() {
+    async function tick() {
       if (camera.value) {
         const canvas = document.createElement("canvas");
         canvas.height = camera.value.height;
@@ -63,6 +62,7 @@ export default defineComponent({
           canvas.height
         );
 
+        const jsQR = (await import("jsqr")).default;
         const code = jsQR(imageData.data, canvas.width, canvas.height, {
           inversionAttempts: "attemptBoth",
         });

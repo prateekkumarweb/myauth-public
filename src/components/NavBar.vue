@@ -5,10 +5,10 @@
     </div>
     <ul class="flex gap-2">
       <li v-if="!signedInUser">
-        <button class="btn-primary" @click="openSignInDialog">Sign in</button>
+        <button class="btnx-primary" @click="openSignInDialog">Sign in</button>
       </li>
       <li v-if="signedInUser">
-        <button class="btn-primary" @click="signOutUser">Sign out</button>
+        <button class="btnx-primary" @click="signOutUser">Sign out</button>
       </li>
     </ul>
   </nav>
@@ -34,10 +34,10 @@
         </label>
         <p v-if="signInError" class="text-red-700">{{ signInError }}</p>
         <div>
-          <button type="submit" class="btn-primary">Sign in</button>
+          <button type="submit" class="btnx-primary">Sign in</button>
           <button
             type="button"
-            class="btn-error ml-2"
+            class="btnx-error ml-2"
             @click="closeSignInDialog"
           >
             Cancel
