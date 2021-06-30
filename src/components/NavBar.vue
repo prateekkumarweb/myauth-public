@@ -2,6 +2,7 @@
   <nav class="border-b shadow p-4 flex justify-between">
     <div class="flex items-center">
       <h1 class="font-bold">MyAuth</h1>
+      <div class="text-xs btnx-primary ml-2 p-[1px]">Alpha</div>
     </div>
     <ul class="flex gap-2">
       <li v-if="!signedInUser">
@@ -9,6 +10,11 @@
       </li>
       <li v-if="signedInUser">
         <button class="btnx-primary" @click="signOutUser">Sign out</button>
+      </li>
+      <li v-if="!signedInUser">
+        <button class="btnx-primary" @click="signInWithGoogle">
+          Sign in with Google
+        </button>
       </li>
     </ul>
   </nav>
@@ -49,7 +55,13 @@
 </template>
 
 <script lang="ts">
-import { getAuth, signInWithEmailAndPassword, signOut } from "@firebase/auth";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithRedirect,
+  signOut,
+} from "@firebase/auth";
 import { computed, defineComponent, ref } from "vue";
 import { useStore } from "../store";
 import AppDialog from "./AppDialog.vue";
@@ -118,8 +130,15 @@ export default defineComponent({
       signOutUser,
     };
 
+    function signInWithGoogle() {
+      const auth = getAuth();
+      const provider = new GoogleAuthProvider();
+      signInWithRedirect(auth, provider);
+    }
+
     return {
       ...signInExports,
+      signInWithGoogle,
     };
   },
 });
