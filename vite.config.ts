@@ -11,6 +11,9 @@ export default defineConfig({
         name: "MyAuth",
         theme_color: "#059669",
       },
+      workbox: {
+        navigateFallbackAllowlist: [/^(?!\/__).*/],
+      },
     }),
   ],
 });
