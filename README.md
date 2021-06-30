@@ -1,5 +1,7 @@
 # MyAuth
 
+[![Deploy to Firebase Hosting on merge](https://github.com/prateekkumarweb/myauth/actions/workflows/firebase-hosting-merge.yml/badge.svg?branch=main)](https://github.com/prateekkumarweb/myauth/actions/workflows/firebase-hosting-merge.yml)
+
 Totp code generator.
 
 ## Recommended IDE Setup
