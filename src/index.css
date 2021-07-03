@@ -14,4 +14,8 @@
   .btnx-error {
     @apply btnx-base text-red-900 bg-red-100 hover:bg-red-200 focus-within:ring-red-500;
   }
+
+  .ma-inline-form {
+    @apply flex gap-2 flex-col md:flex-row md:items-center;
+  }
 }

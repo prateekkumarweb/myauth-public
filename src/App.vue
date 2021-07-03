@@ -8,26 +8,12 @@
 
   <nav-bar></nav-bar>
 
-  <div v-if="user">
-    <div class="m-4 gap-2 flex flex-col">
-      <export-and-import></export-and-import>
-      <div><!-- Exmpty div for gap --></div>
-      <div v-if="params.length == 0">
-        There are no saved accounts. Import your accounts if you have previously
-        synced.
-      </div>
-      <template v-for="(item, index) in params" :key="index">
-        <otp-card
-          v-if="item"
-          :secret="item.secret"
-          :issuer="item.issuer"
-          :label="item.label"
-          @deleteAccount="deleteAccount(index)"
-        ></otp-card>
-      </template>
-    </div>
+  <div v-if="user" class="m-4 flex flex-col gap-2">
+    <create-master-password />
 
-    <add-account @addParam="addParam"></add-account>
+    <decrypt-synced-data />
+
+    <display-totps />
   </div>
 
   <div v-if="!user" class="m-4">You need to sign in to use this app.</div>
@@ -37,13 +23,12 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import AddAccount from "./components/AddAccount.vue";
-import ExportAndImport from "./components/ExportAndImport.vue";
+import CreateMasterPassword from "./components/CreateMasterPassword.vue";
+import DecryptSyncedData from "./components/DecryptSyncedData.vue";
+import DisplayTotps from "./components/DisplayTotps.vue";
 import NavBar from "./components/NavBar.vue";
-import OtpCard from "./components/OtpCard.vue";
 import ReloadPrompt from "./components/ReloadPrompt.vue";
 import { setAuthObserver } from "./firebase";
-import type { OtpAuthParam } from "./store";
 import { useStore } from "./store";
 
 setAuthObserver();
@@ -52,14 +37,4 @@ const store = useStore();
 
 const user = computed(() => store.user);
 const loading = computed(() => store.loading);
-
-const params = store.otpAuthParams;
-
-function addParam(value: OtpAuthParam) {
-  store.addParam(value);
-}
-
-function deleteAccount(index: number) {
-  store.deleteParam(index);
-}
 </script>

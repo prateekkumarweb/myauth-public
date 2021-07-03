@@ -17,9 +17,10 @@ console.log("Firebase loaded");
 export async function setAuthObserver(): Promise<void> {
   const store = useStore();
   store.startLoading();
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, async (user) => {
     if (user) {
       store.signIn(user);
+      await store.loadInitialData();
     } else {
       store.signOut();
     }
