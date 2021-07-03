@@ -1,4 +1,11 @@
 <template>
+  <div
+    v-if="loading"
+    class="absolute h-full w-full bg-white flex items-center justify-center"
+  >
+    Loading ...
+  </div>
+
   <nav-bar></nav-bar>
 
   <div v-if="user">
@@ -61,6 +68,7 @@ export default defineComponent({
         store.deleteParam(index);
       },
       user: computed(() => store.user),
+      loading: computed(() => store.loading),
     };
   },
 });

@@ -19,14 +19,21 @@ export interface AuthUser {
 interface AppState {
   otpAuthParams: OtpAuthParam[];
   user: AuthUser | null | undefined; // undefined means data not loaded yet
+  loading: boolean;
 }
 
 export const useStore = defineStore({
   id: "myAuthStore",
   state(): AppState {
-    return { otpAuthParams: [], user: undefined };
+    return { otpAuthParams: [], user: undefined, loading: false };
   },
   actions: {
+    startLoading() {
+      this.loading = true;
+    },
+    stopLoading() {
+      this.loading = false;
+    },
     signIn(user: User) {
       const {
         displayName,

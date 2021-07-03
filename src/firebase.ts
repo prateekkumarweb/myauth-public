@@ -16,6 +16,7 @@ console.log("Firebase loaded");
 
 export async function setAuthObserver(): Promise<void> {
   const store = useStore();
+  store.startLoading();
   onAuthStateChanged(auth, (user) => {
     if (user) {
       store.signIn(user);
@@ -23,5 +24,6 @@ export async function setAuthObserver(): Promise<void> {
       store.signOut();
     }
     console.log("Sign in state changed");
+    store.stopLoading();
   });
 }
