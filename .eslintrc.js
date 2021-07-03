@@ -17,5 +17,8 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["vue", "@typescript-eslint"],
-  rules: {},
+  rules: {
+    // Conflict with script setup (instead turned on noUnusedLocals in tsconfig.json)
+    "@typescript-eslint/no-unused-vars": "off",
+  },
 };

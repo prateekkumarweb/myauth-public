@@ -35,41 +35,31 @@
   <reload-prompt />
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
 import AddAccount from "./components/AddAccount.vue";
 import ExportAndImport from "./components/ExportAndImport.vue";
 import NavBar from "./components/NavBar.vue";
 import OtpCard from "./components/OtpCard.vue";
 import ReloadPrompt from "./components/ReloadPrompt.vue";
 import { setAuthObserver } from "./firebase";
-import { OtpAuthParam, useStore } from "./store";
+import type { OtpAuthParam } from "./store";
+import { useStore } from "./store";
 
-export default defineComponent({
-  name: "App",
-  components: {
-    NavBar,
-    OtpCard,
-    AddAccount,
-    ReloadPrompt,
-    ExportAndImport,
-  },
-  setup() {
-    setAuthObserver();
+setAuthObserver();
 
-    const store = useStore();
+const store = useStore();
 
-    return {
-      params: store.otpAuthParams,
-      addParam(value: OtpAuthParam) {
-        store.addParam(value);
-      },
-      deleteAccount(index: number) {
-        store.deleteParam(index);
-      },
-      user: computed(() => store.user),
-      loading: computed(() => store.loading),
-    };
-  },
-});
+const user = computed(() => store.user);
+const loading = computed(() => store.loading);
+
+const params = store.otpAuthParams;
+
+function addParam(value: OtpAuthParam) {
+  store.addParam(value);
+}
+
+function deleteAccount(index: number) {
+  store.deleteParam(index);
+}
 </script>

@@ -91,141 +91,128 @@
   </app-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { doc, getDoc, getFirestore, setDoc } from "@firebase/firestore";
-import { defineComponent, ref } from "vue";
+import { ref } from "vue";
 import { decrypt, encrypt } from "../crypt";
-import { OtpAuthParam, useStore } from "../store";
+import type { OtpAuthParam } from "../store";
+import { useStore } from "../store";
 import AppDialog from "./AppDialog.vue";
 
-export default defineComponent({
-  components: { AppDialog },
-  setup() {
-    const store = useStore();
+const store = useStore();
 
-    const isOpen = ref(false);
-    const showImportView = ref(false);
+const isOpen = ref(false);
+const showImportView = ref(false);
 
-    const errorString = ref("");
-    const encrypted = ref("");
-    const password = ref("");
-    const exportedKeys = ref("");
-    const keepExisting = ref(false);
+const errorString = ref("");
+const encrypted = ref("");
+const password = ref("");
+const exportedKeys = ref("");
+const keepExisting = ref(false);
 
-    function closeModal() {
-      isOpen.value = false;
-      password.value = "";
-      encrypted.value = "";
-      errorString.value = "";
-      exportedKeys.value = "";
-      keepExisting.value = false;
+function closeModal() {
+  isOpen.value = false;
+  password.value = "";
+  encrypted.value = "";
+  errorString.value = "";
+  exportedKeys.value = "";
+  keepExisting.value = false;
+  syncError.value = "";
+  syncSuccess.value = "";
+}
+
+const syncError = ref("");
+const syncSuccess = ref("");
+
+function setIsOpen(value: boolean) {
+  isOpen.value = value;
+  if (!value) {
+    password.value = "";
+    errorString.value = "";
+  }
+}
+
+function openExportModal() {
+  isOpen.value = true;
+  showImportView.value = false;
+}
+
+function openImportModal() {
+  isOpen.value = true;
+  showImportView.value = true;
+}
+
+async function exportKeys() {
+  if (password.value.length < 8) {
+    errorString.value = "Password should be at least 8 chars long";
+  } else {
+    errorString.value = "";
+    const message = JSON.stringify({
+      version: "1",
+      params: store.otpAuthParams,
+    });
+    const encrypted = await encrypt(message, password.value);
+    exportedKeys.value = encrypted;
+  }
+}
+
+async function importKeys() {
+  try {
+    errorString.value = "";
+    const decrypted = await decrypt(encrypted.value.trim(), password.value);
+    const imported = JSON.parse(decrypted) as {
+      params: OtpAuthParam[];
+      version: string;
+    };
+    store.importParams(imported.params, keepExisting.value);
+    closeModal();
+  } catch (e) {
+    if (e.name === "OperationError") {
+      errorString.value =
+        "Decryption failed. Ensure that the password is correct and the encrypted text is not corrupted";
+    } else {
+      console.error(e);
+    }
+  }
+}
+
+async function syncWithFirestore() {
+  const user = store.user;
+  if (user) {
+    try {
       syncError.value = "";
       syncSuccess.value = "";
+      const data = {
+        user: user.uid,
+        exported: exportedKeys.value,
+        lastSyncedAt: Date.now(),
+      };
+      const db = getFirestore();
+      await setDoc(doc(db, "user_exports", user.uid), data);
+      syncSuccess.value = "Sync successful";
+    } catch (e) {
+      syncError.value = e.message;
+      console.error(e); // TODO Show sync error
     }
+  }
+}
 
-    const syncError = ref("");
-    const syncSuccess = ref("");
-
-    return {
-      isOpen,
-      showImportView,
-      setIsOpen(value: boolean) {
-        isOpen.value = value;
-        if (!value) {
-          password.value = "";
-          errorString.value = "";
-        }
-      },
-      openExportModal() {
-        isOpen.value = true;
-        showImportView.value = false;
-      },
-      openImportModal() {
-        isOpen.value = true;
-        showImportView.value = true;
-      },
-      closeModal,
-      errorString,
-      password,
-      keepExisting,
-      encrypted,
-      exportedKeys,
-      async exportKeys() {
-        if (password.value.length < 8) {
-          errorString.value = "Password should be at least 8 chars long";
-        } else {
-          errorString.value = "";
-          const message = JSON.stringify({
-            version: "1",
-            params: store.otpAuthParams,
-          });
-          const encrypted = await encrypt(message, password.value);
-          exportedKeys.value = encrypted;
-        }
-      },
-      async importKeys() {
-        try {
-          errorString.value = "";
-          const decrypted = await decrypt(
-            encrypted.value.trim(),
-            password.value
-          );
-          const imported = JSON.parse(decrypted) as {
-            params: OtpAuthParam[];
-            version: string;
-          };
-          store.importParams(imported.params, keepExisting.value);
-          closeModal();
-        } catch (e) {
-          if (e.name === "OperationError") {
-            errorString.value =
-              "Decryption failed. Ensure that the password is correct and the encrypted text is not corrupted";
-          } else {
-            console.error(e);
-          }
-        }
-      },
-      syncError,
-      syncSuccess,
-      async syncWithFirestore() {
-        const user = store.user;
-        if (user) {
-          try {
-            syncError.value = "";
-            syncSuccess.value = "";
-            const data = {
-              user: user.uid,
-              exported: exportedKeys.value,
-              lastSyncedAt: Date.now(),
-            };
-            const db = getFirestore();
-            await setDoc(doc(db, "user_exports", user.uid), data);
-            syncSuccess.value = "Sync successful";
-          } catch (e) {
-            syncError.value = e.message;
-            console.error(e); // TODO Show sync error
-          }
-        }
-      },
-      async importFromFirestore() {
-        const user = store.user;
-        if (user) {
-          if (user) {
-            try {
-              syncError.value = "";
-              syncSuccess.value = "";
-              const db = getFirestore();
-              const dataDoc = await getDoc(doc(db, "user_exports", user.uid));
-              encrypted.value = dataDoc.data()?.exported ?? "";
-              syncSuccess.value = "Sync successful";
-            } catch (e) {
-              syncError.value = e.message;
-              console.error(e);
-            }
-          }
-        }
-      },
-    };
-  },
-});
+async function importFromFirestore() {
+  const user = store.user;
+  if (user) {
+    if (user) {
+      try {
+        syncError.value = "";
+        syncSuccess.value = "";
+        const db = getFirestore();
+        const dataDoc = await getDoc(doc(db, "user_exports", user.uid));
+        encrypted.value = dataDoc.data()?.exported ?? "";
+        syncSuccess.value = "Sync successful";
+      } catch (e) {
+        syncError.value = e.message;
+        console.error(e);
+      }
+    }
+  }
+}
 </script>

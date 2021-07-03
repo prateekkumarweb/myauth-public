@@ -31,59 +31,53 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, onUnmounted, ref } from "vue";
+<script setup lang="ts">
+import { onUnmounted, ref } from "vue";
 import { getTotp } from "../totp";
 import TrashIcon from "./icons/TrashIcon.vue";
 
-export default defineComponent({
-  components: { TrashIcon },
-  props: {
-    secret: {
-      type: String,
-      required: true,
-    },
-    label: {
-      type: String,
-      required: true,
-    },
-    issuer: {
-      type: String,
-      required: true,
-    },
+// eslint-disable-next-line no-undef
+const props = defineProps({
+  secret: {
+    type: String,
+    required: true,
   },
-  emits: ["deleteAccount"],
-  setup(props, { emit }) {
-    const otpPart1 = ref("___");
-    const otpPart2 = ref("___");
-    const timeRemaining = ref(15);
-
-    const otpInterval = setInterval(async () => {
-      try {
-        const totp = await getTotp(props.secret);
-        const otp = totp.otp.toString().padStart(6, "0");
-        otpPart1.value = otp.slice(0, 3);
-        otpPart2.value = otp.slice(3, 6);
-        timeRemaining.value = Math.trunc(totp.timeRemaining);
-      } catch (e) {
-        console.error(e);
-        timeRemaining.value = 0;
-        clearInterval(otpInterval);
-      }
-    }, 500);
-
-    onUnmounted(() => {
-      clearInterval(otpInterval);
-    });
-
-    return {
-      otpPart1,
-      otpPart2,
-      timeRemaining,
-      deleteAccount() {
-        emit("deleteAccount");
-      },
-    };
+  label: {
+    type: String,
+    required: true,
+  },
+  issuer: {
+    type: String,
+    required: true,
   },
 });
+
+// eslint-disable-next-line no-undef
+const emit = defineEmits(["deleteAccount"]);
+
+const otpPart1 = ref("___");
+const otpPart2 = ref("___");
+const timeRemaining = ref(15);
+
+const otpInterval = setInterval(async () => {
+  try {
+    const totp = await getTotp(props.secret);
+    const otp = totp.otp.toString().padStart(6, "0");
+    otpPart1.value = otp.slice(0, 3);
+    otpPart2.value = otp.slice(3, 6);
+    timeRemaining.value = Math.trunc(totp.timeRemaining);
+  } catch (e) {
+    console.error(e);
+    timeRemaining.value = 0;
+    clearInterval(otpInterval);
+  }
+}, 500);
+
+onUnmounted(() => {
+  clearInterval(otpInterval);
+});
+
+function deleteAccount() {
+  emit("deleteAccount");
+}
 </script>

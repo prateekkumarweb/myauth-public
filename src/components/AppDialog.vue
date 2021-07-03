@@ -55,32 +55,25 @@
   </Dialog>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import { Dialog, DialogOverlay, DialogTitle } from "@headlessui/vue";
 
-export default defineComponent({
-  components: {
-    Dialog,
-    DialogOverlay,
-    DialogTitle,
-  },
-  props: {
-    title: { type: String, required: true },
-    showTopButton: { type: Boolean, default: false },
-    topButtonText: { type: String, default: "" },
-    isOpen: { type: Boolean, required: true },
-  },
-  emits: ["topButtonClicked", "setIsOpen"],
-  setup(props, { emit }) {
-    return {
-      setIsOpen(value: boolean) {
-        emit("setIsOpen", value);
-      },
-      topButtonClicked() {
-        emit("topButtonClicked");
-      },
-    };
-  },
+// eslint-disable-next-line no-undef
+defineProps({
+  title: { type: String, required: true },
+  showTopButton: { type: Boolean, default: false },
+  topButtonText: { type: String, default: "" },
+  isOpen: { type: Boolean, required: true },
 });
+
+// eslint-disable-next-line no-undef
+const emit = defineEmits(["topButtonClicked", "setIsOpen"]);
+
+function setIsOpen(value: boolean) {
+  emit("setIsOpen", value);
+}
+
+function topButtonClicked() {
+  emit("topButtonClicked");
+}
 </script>

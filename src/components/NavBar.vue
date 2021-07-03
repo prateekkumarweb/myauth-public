@@ -54,7 +54,7 @@
   </app-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   getAuth,
   GoogleAuthProvider,
@@ -62,84 +62,61 @@ import {
   signInWithRedirect,
   signOut,
 } from "@firebase/auth";
-import { computed, defineComponent, ref } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "../store";
 import AppDialog from "./AppDialog.vue";
 
-export default defineComponent({
-  components: { AppDialog },
-  setup() {
-    const store = useStore();
+const store = useStore();
 
-    const signedInUser = computed(() => store.user);
-    const isSignInDialogOpen = ref(false);
-    const signInEmail = ref("");
-    const signInPassword = ref("");
-    const signInError = ref("");
+const signedInUser = computed(() => store.user);
+const isSignInDialogOpen = ref(false);
+const signInEmail = ref("");
+const signInPassword = ref("");
+const signInError = ref("");
 
-    const setSignInDialogOpen = (value: boolean) => {
-      isSignInDialogOpen.value = value;
-    };
-    const openSignInDialog = () => {
-      isSignInDialogOpen.value = true;
-    };
-    const closeSignInDialog = () => {
-      isSignInDialogOpen.value = false;
-      signInError.value = "";
-      signInPassword.value = "";
-    };
+const setSignInDialogOpen = (value: boolean) => {
+  isSignInDialogOpen.value = value;
+};
+const openSignInDialog = () => {
+  isSignInDialogOpen.value = true;
+};
+const closeSignInDialog = () => {
+  isSignInDialogOpen.value = false;
+  signInError.value = "";
+  signInPassword.value = "";
+};
 
-    const signInUser = async () => {
-      if (!signInEmail.value || !signInPassword.value) {
-        signInError.value = "Email and password are required";
-        return;
-      }
-      const auth = getAuth();
-      try {
-        await signInWithEmailAndPassword(
-          auth,
-          signInEmail.value,
-          signInPassword.value
-        );
-        closeSignInDialog();
-      } catch (e) {
-        console.error("Sign in error: ", e);
-        signInError.value = "Invalid credentials";
-      }
-    };
+const signInUser = async () => {
+  if (!signInEmail.value || !signInPassword.value) {
+    signInError.value = "Email and password are required";
+    return;
+  }
+  const auth = getAuth();
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      signInEmail.value,
+      signInPassword.value
+    );
+    closeSignInDialog();
+  } catch (e) {
+    console.error("Sign in error: ", e);
+    signInError.value = "Invalid credentials";
+  }
+};
 
-    const signOutUser = async () => {
-      const auth = getAuth();
-      try {
-        await signOut(auth);
-      } catch (e) {
-        console.error("Sign out error: ", e);
-      }
-    };
+const signOutUser = async () => {
+  const auth = getAuth();
+  try {
+    await signOut(auth);
+  } catch (e) {
+    console.error("Sign out error: ", e);
+  }
+};
 
-    const signInExports = {
-      isSignInDialogOpen,
-      signInEmail,
-      signInPassword,
-      signInError,
-      setSignInDialogOpen,
-      openSignInDialog,
-      closeSignInDialog,
-      signInUser,
-      signedInUser,
-      signOutUser,
-    };
-
-    function signInWithGoogle() {
-      const auth = getAuth();
-      const provider = new GoogleAuthProvider();
-      signInWithRedirect(auth, provider);
-    }
-
-    return {
-      ...signInExports,
-      signInWithGoogle,
-    };
-  },
-});
+function signInWithGoogle() {
+  const auth = getAuth();
+  const provider = new GoogleAuthProvider();
+  signInWithRedirect(auth, provider);
+}
 </script>

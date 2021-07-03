@@ -67,78 +67,64 @@
   </app-dialog>
 </template>
 
-<script lang="ts">
-import { QRCode } from "jsqr";
-import { defineComponent, ref } from "vue";
+<script setup lang="ts">
+import type { QRCode } from "jsqr";
+import { ref } from "vue";
 import { otpAuthUriParser } from "../totp";
 import AppDialog from "./AppDialog.vue";
 import PlusIcon from "./icons/PlusIcon.vue";
 import QrCodeScanner from "./QrCodeScanner.vue";
 
-export default defineComponent({
-  components: {
-    PlusIcon,
-    QrCodeScanner,
-    AppDialog,
-  },
-  emits: ["addParam"],
+// eslint-disable-next-line no-undef
+const emit = defineEmits(["addParam"]);
 
-  setup(props, { emit }) {
-    const isOpen = ref(false);
+const isOpen = ref(false);
 
-    const label = ref("");
-    const issuer = ref("");
-    const secret = ref("");
-    const errorString = ref("");
+const label = ref("");
+const issuer = ref("");
+const secret = ref("");
+const errorString = ref("");
 
-    function closeModal() {
-      isOpen.value = false;
-      errorString.value = "";
-      label.value = "";
-      issuer.value = "";
-      secret.value = "";
-    }
+function closeModal() {
+  isOpen.value = false;
+  errorString.value = "";
+  label.value = "";
+  issuer.value = "";
+  secret.value = "";
+}
 
-    const showScanner = ref(true);
+const showScanner = ref(true);
 
-    return {
-      isOpen,
-      closeModal,
-      addAndClose() {
-        if (label.value && issuer.value && secret.value) {
-          emit("addParam", {
-            label: label.value,
-            issuer: issuer.value,
-            secret: secret.value,
-          });
-          closeModal();
-        } else {
-          errorString.value = "All fields are required";
-        }
-      },
-      openModal() {
-        isOpen.value = true;
-      },
-      setIsOpen(value: boolean) {
-        isOpen.value = value;
-      },
-      label,
-      issuer,
-      secret,
-      errorString,
-      showScanner,
-      qrCodeScan(code: QRCode) {
-        const otpAuthUri = code.data;
-        const otpAuthParam = otpAuthUriParser(otpAuthUri);
-        if (otpAuthParam) {
-          label.value = otpAuthParam.label;
-          issuer.value = otpAuthParam.issuer;
-          secret.value = otpAuthParam.secret;
-          showScanner.value = false;
-        }
-        showScanner.value = false;
-      },
-    };
-  },
-});
+function addAndClose() {
+  if (label.value && issuer.value && secret.value) {
+    emit("addParam", {
+      label: label.value,
+      issuer: issuer.value,
+      secret: secret.value,
+    });
+    closeModal();
+  } else {
+    errorString.value = "All fields are required";
+  }
+}
+
+function openModal() {
+  isOpen.value = true;
+}
+
+function setIsOpen(value: boolean) {
+  isOpen.value = value;
+}
+
+function qrCodeScan(code: QRCode) {
+  const otpAuthUri = code.data;
+  const otpAuthParam = otpAuthUriParser(otpAuthUri);
+  if (otpAuthParam) {
+    label.value = otpAuthParam.label;
+    issuer.value = otpAuthParam.issuer;
+    secret.value = otpAuthParam.secret;
+    showScanner.value = false;
+  }
+  showScanner.value = false;
+}
 </script>
