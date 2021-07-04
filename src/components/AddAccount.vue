@@ -11,7 +11,7 @@
       <div>{{ !showScanner ? "Enter manually" : "Scan QR" }}</div>
       <div class="flex gap-2">
         <button class="btnx-primary" @click="showScanner = !showScanner">
-          Enter manually
+          {{ showScanner ? "Enter manually" : "Scan QR" }}
         </button>
 
         <button class="btnx-error" @click="closeModal">Close</button>
