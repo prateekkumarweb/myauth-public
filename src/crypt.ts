@@ -1,3 +1,5 @@
+// Based on https://bradyjoslin.com/blog/encryption-webcrypto/
+
 async function getPasswordKey(password: string): Promise<CryptoKey> {
   return await crypto.subtle.importKey(
     "raw",

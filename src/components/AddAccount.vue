@@ -1,28 +1,28 @@
 <template>
-  <div class="fixed bottom-0 right-0 m-4">
-    <button
-      type="button"
-      class="border-1 shadow rounded-full p-2 text-green-800 bg-green-200"
-      aria-label="Add"
-      @click="openModal()"
-    >
-      <plus-icon class="h-10 w-10"></plus-icon>
-    </button>
+  <div class="flex items-center justify-center">
+    <button class="btnx-primary" @click="openModal()">Add account</button>
   </div>
 
-  <app-dialog
-    :title="!showScanner ? 'Enter manually' : 'Scan QR'"
-    :show-top-button="true"
-    :top-button-text="showScanner ? 'Enter manually' : 'Scan QR'"
-    :is-open="isOpen"
-    @topButtonClicked="showScanner = !showScanner"
-    @setIsOpen="setIsOpen"
+  <div
+    v-if="isOpen"
+    class="absolute top-0 left-0 w-full h-full bg-white flex flex-col gap-2 p-4"
   >
-    <div v-if="showScanner">
+    <div class="flex justify-between gap-2 items-center">
+      <div>{{ !showScanner ? "Enter manually" : "Scan QR" }}</div>
+      <div class="flex gap-2">
+        <button class="btnx-primary" @click="showScanner = !showScanner">
+          Enter manually
+        </button>
+
+        <button class="btnx-error" @click="closeModal">Close</button>
+      </div>
+    </div>
+
+    <div v-if="showScanner" class="flex flex-col items-center">
       <qr-code-scanner class="mt-2" @qrCodeScan="qrCodeScan"></qr-code-scanner>
     </div>
 
-    <div v-if="!showScanner">
+    <div v-if="!showScanner" class="flex flex-col items-center">
       <div class="mt-2 text-gray-700 flex flex-col gap-3">
         <label class="block">
           <span>Label</span>
@@ -64,15 +64,13 @@
         </button>
       </div>
     </div>
-  </app-dialog>
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { QRCode } from "jsqr";
 import { ref } from "vue";
 import { otpAuthUriParser } from "../totp";
-import AppDialog from "./AppDialog.vue";
-import PlusIcon from "./icons/PlusIcon.vue";
 import QrCodeScanner from "./QrCodeScanner.vue";
 
 // eslint-disable-next-line no-undef
@@ -110,10 +108,6 @@ function addAndClose() {
 
 function openModal() {
   isOpen.value = true;
-}
-
-function setIsOpen(value: boolean) {
-  isOpen.value = value;
 }
 
 function qrCodeScan(code: QRCode) {

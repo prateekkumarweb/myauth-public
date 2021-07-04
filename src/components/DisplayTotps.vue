@@ -31,9 +31,9 @@
           @deleteAccount="deleteAccount(index)"
         ></otp-card>
       </template>
-    </div>
 
-    <add-account @addParam="addParam"></add-account>
+      <add-account @addParam="addParam"></add-account>
+    </div>
   </div>
 </template>
 
